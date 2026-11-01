@@ -102,6 +102,21 @@ runResourceCli({
 type names, with exactly its kind, arguments and return type, and fails naming each one that is missing or
 differs. The contract is a type only, so the resource depends on its abstract only to build.
 
+## Decisions
+
+- **Resource packages are named by their extends path** (Alex, 2026-11-01): an abstract is
+  `jive-abstract-resource-<kind path>` and an implementation `jive-resource-<kind path>-<system>`, e.g.
+  `jive-abstract-resource-connector-package-registry` and `jive-resource-connector-package-registry-npm`.
+- A resource is a Convex component published to npm, defining a kind of resource an organization owns; an app (the
+  first is `@jive-sh/server`) installs it with `app.use`. This machinery was built on 2026-10-26 as
+  `jive-abstract-connector` and moved here when the packages were renamed on 2026-11-01.
+
+## Working on the test fixture
+
+`test/fixture` depends on this package as `file:../..`, so each local fixture install copies the previous install's
+`node_modules` into itself until `find`, `git status` and installs hang. Run
+`rm -rf test/fixture/node_modules` before installing, and use `git status -uno` inside the fixture.
+
 ## Limitations
 
 - `jive create resource` is not built: `jive create` does not resolve abstracts yet. Use `jive-resource create`.
