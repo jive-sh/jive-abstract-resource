@@ -3,7 +3,7 @@
   "license": "MIT",
   "name": "jive-abstract-resource",
   "description": "A Jive abstract defining a kind of resource an organization owns, as a Convex component: scaffolds the component, builds it, checks it installs into a Convex app, and publishes it to npm.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "type": "module",
   "peerDependencies": {
     "effect": "^4.0.0",

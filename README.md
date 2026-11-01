@@ -112,7 +112,7 @@ page, decided 2026-11-01). It takes `{ instance, caller }`, plus `account` for a
 | --- | --- |
 | `{ status: "ready", instanceId, instance }` | The instance exists and the caller may use it; `instanceId` is the component's id for it. |
 | `{ status: "inProgress", retryAfterSeconds }` | Another caller is provisioning it; ask again later. |
-| `{ status: "personNeeded", reason, url }` | The outside system wants a person first, on its own page `url`. |
+| `{ status: "personNeeded", reason, url, resultUrl? }` | The outside system wants a person first. `url` is the page a person would open. `resultUrl`, when present, is where a program polls for what that page produces. |
 | `{ status: "refused", reason }` | The caller may not have it; `reason` says what to change. |
 
 - `instance` is the kind's declaration of one instance; for a package registry, `{ packageName }`.

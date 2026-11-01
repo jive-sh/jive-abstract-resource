@@ -27,11 +27,12 @@ export type ResourceCaller = {
  * - `ready`: the instance exists and the caller may use it. `instanceId` is the component's id for it, stable across
  *   calls.
  * - `inProgress`: another caller is provisioning the same instance; ask again after `retryAfterSeconds`.
- * - `personNeeded`: the outside system wants a person first (npm's second factor, say) on its own page, `url`.
+ * - `personNeeded`: the outside system wants a person first (npm's second factor, say). `url` is the page a person
+ *   would open. `resultUrl`, when the system has one, is where a program polls for what that page produces.
  * - `refused`: the caller may not have this instance; `reason` says what to change.
  */
 export type EnsureInstanceResult<Instance> =
   | { status: "ready"; instanceId: string; instance: Instance }
   | { status: "inProgress"; retryAfterSeconds: number }
-  | { status: "personNeeded"; reason: string; url: string }
+  | { status: "personNeeded"; reason: string; url: string; resultUrl?: string }
   | { status: "refused"; reason: string };
