@@ -102,6 +102,26 @@ runResourceCli({
 type names, with exactly its kind, arguments and return type, and fails naming each one that is missing or
 differs. The contract is a type only, so the resource depends on its abstract only to build.
 
+### The standard call: `resource.ensureInstance`
+
+Every kind's contract includes one action, `resource.ensureInstance`: "make sure this instance exists" (design
+page, decided 2026-11-01). It takes `{ instance, caller }`, plus `account` for a connector kind, and answers
+`EnsureInstanceResult<Instance>`. This package exports both types:
+
+| Answer | Meaning |
+| --- | --- |
+| `{ status: "ready", instanceId, instance }` | The instance exists and the caller may use it; `instanceId` is the component's id for it. |
+| `{ status: "inProgress", retryAfterSeconds }` | Another caller is provisioning it; ask again later. |
+| `{ status: "personNeeded", reason, url }` | The outside system wants a person first, on its own page `url`. |
+| `{ status: "refused", reason }` | The caller may not have it; `reason` says what to change. |
+
+- `instance` is the kind's declaration of one instance; for a package registry, `{ packageName }`.
+- `caller` is a `ResourceCaller`: the code repository whose deploy job asks (`{ id, owner, name }`, where `id` is the
+  installing app's id for it), plus the job's environment and workflow file.
+- The component records each instance in its own tables, and binds it to the repository that first provisioned it.
+- The installing app (`@jive-sh/server`'s `resources:provision`) calls `ensureInstance` on whichever implementation of
+  the kind the caller's organization configured.
+
 ## Decisions
 
 - **Resource packages are named by their extends path** (Alex, 2026-11-01): an abstract is
